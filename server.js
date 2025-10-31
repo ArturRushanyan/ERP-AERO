@@ -1,7 +1,9 @@
+const config = require("./config/config");
+
 const startServer = async (app) => {
   try {
-    app.listen(3000, () => {
-      console.log(`Server is up on port: ${3000}`);
+    app.listen(config.PORT, () => {
+      console.log(`Server is up on port: ${config.PORT}`);
     });
   } catch (error) {
     console.log("Server is not running:", error);
