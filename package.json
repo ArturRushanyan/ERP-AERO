@@ -11,11 +11,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^6.18.0",
     "body-parser": "^2.2.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
-    "mysql2": "^3.15.3",
-    "typeorm": "^0.3.27"
+    "mysql2": "^3.15.3"
+  },
+  "devDependencies": {
+    "prisma": "^6.18.0"
   }
 }
