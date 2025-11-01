@@ -4,7 +4,7 @@ const { fileIdCheck } = require("../middleware/fileCheck");
 const {
   uploadFile,
   getFileInfo,
-  downloadFileAlternative,
+  downloadFile,
 } = require("../controllers/fileController");
 
 const router = express.Router();
@@ -12,6 +12,6 @@ const router = express.Router();
 // File routes
 router.post("/upload", upload.single("file"), uploadFile);
 router.get("/:id", fileIdCheck, getFileInfo);
-router.get("/download/:id", fileIdCheck, downloadFileAlternative);
+router.get("/download/:id", fileIdCheck, downloadFile);
 
 module.exports = router;

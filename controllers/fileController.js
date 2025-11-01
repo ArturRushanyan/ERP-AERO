@@ -58,7 +58,7 @@ const getFileInfo = async (req, res, next) => {
   }
 };
 
-const downloadFileAlternative = async (req, res) => {
+const downloadFile = async (req, res) => {
   try {
     const fileId = req.params.id;
     const fileRecord = await getFileById(fileId);
@@ -86,5 +86,5 @@ const downloadFileAlternative = async (req, res) => {
 module.exports = {
   uploadFile,
   getFileInfo,
-  downloadFileAlternative,
+  downloadFile,
 };
