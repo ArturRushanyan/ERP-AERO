@@ -68,9 +68,23 @@ const updateFile = async (id, newFileData) => {
   }
 };
 
+const getFilesPaginated = async (paginationData) => {
+  try {
+    const data = await prisma.fileRecord.findMany({
+      skip: paginationData.offset,
+      take: paginationData.limit,
+    });
+
+    return data;
+  } catch (error) {
+    throw new Error(`Failed to get files by pagination: ${error.message}`);
+  }
+};
+
 module.exports = {
   createFileRecord,
   getFileById,
   deleteFile,
   updateFile,
+  getFilesPaginated,
 };

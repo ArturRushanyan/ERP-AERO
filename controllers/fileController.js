@@ -4,6 +4,7 @@ const {
   getFileById,
   deleteFile,
   updateFile,
+  getFilesPaginated,
 } = require("../services/fileService");
 const { deleteFileFromFileSystem } = require("../utils/fileUtils");
 
@@ -164,10 +165,21 @@ const updateFileById = async (req, res) => {
   }
 };
 
+const getFileList = async (req, res, next) => {
+  try {
+    const result = await getFilesPaginated(req.pagination);
+
+    return res.status(200).json({ data: result });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   uploadFile,
   getFileInfo,
   downloadFile,
   deleteFileById,
   updateFileById,
+  getFileList,
 };
