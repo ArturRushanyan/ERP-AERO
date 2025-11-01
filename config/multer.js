@@ -1,6 +1,6 @@
 const multer = require("multer");
 const fs = require("fs");
-const { uploadDir } = require("../utils/constants");
+const { uploadDir, allowedMimes } = require("../utils/constants");
 
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
@@ -18,14 +18,6 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-  const allowedMimes = [
-    "image/jpeg",
-    "image/png",
-    "image/gif",
-    "application/pdf",
-    "text/plain",
-  ];
-
   if (allowedMimes.includes(file.mimetype)) {
     cb(null, true);
   } else {
