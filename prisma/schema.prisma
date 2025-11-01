@@ -20,5 +20,6 @@ model FileRecord {
   ext         String   @db.VarChar(255)
   mime        String   @db.VarChar(255)
   size        Int
+  file_path   String   @db.VarChar(500)
   upload_date DateTime @default(now())
 }
