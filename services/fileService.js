@@ -44,8 +44,33 @@ const deleteFile = async (id) => {
   }
 };
 
+const updateFile = async (id, newFileData) => {
+  try {
+    const ext = path.extname(newFileData.originalname).toLowerCase();
+
+    const updatedFile = await prisma.fileRecord.update({
+      where: { id: parseInt(id) },
+      data: {
+        name: newFileData.originalname,
+        ext: ext,
+        mime: newFileData.mimetype,
+        size: newFileData.size,
+        file_path: newFileData.path,
+      },
+    });
+
+    return updatedFile;
+  } catch (error) {
+    throw {
+      original_error: error.message,
+      message: "Failed to update file info",
+    };
+  }
+};
+
 module.exports = {
   createFileRecord,
   getFileById,
   deleteFile,
+  updateFile,
 };
