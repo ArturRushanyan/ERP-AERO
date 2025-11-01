@@ -21,6 +21,18 @@ const createFileRecord = async (fileData) => {
   }
 };
 
+const getFileById = async (id) => {
+  try {
+    const fileRecord = await prisma.fileRecord.findUnique({
+      where: { id: parseInt(id) },
+    });
+    return fileRecord;
+  } catch (error) {
+    throw new Error(`Failed to get file: ${error.message}`);
+  }
+};
+
 module.exports = {
   createFileRecord,
+  getFileById,
 };

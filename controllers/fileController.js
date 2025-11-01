@@ -1,4 +1,4 @@
-const { createFileRecord } = require("../services/fileService");
+const { createFileRecord, getFileById } = require("../services/fileService");
 
 const uploadFile = async (req, res, next) => {
   try {
@@ -32,6 +32,31 @@ const uploadFile = async (req, res, next) => {
   }
 };
 
+const getFileInfo = async (req, res, next) => {
+  try {
+    const fileId = req.params.id;
+    const fileRecord = await getFileById(fileId);
+
+    if (!fileRecord) {
+      return res.status(404).json({ error: "File not found" });
+    }
+
+    res.json({
+      data: {
+        id: fileRecord.id,
+        name: fileRecord.name,
+        ext: fileRecord.ext,
+        mime: fileRecord.mime,
+        size: fileRecord.size,
+        upload_date: fileRecord.upload_date,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   uploadFile,
+  getFileInfo,
 };
