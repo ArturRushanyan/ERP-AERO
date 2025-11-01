@@ -32,7 +32,20 @@ const getFileById = async (id) => {
   }
 };
 
+const deleteFile = async (id) => {
+  try {
+    await prisma.fileRecord.delete({
+      where: { id: parseInt(id) },
+    });
+
+    return true;
+  } catch (error) {
+    throw new Error(`Failed to delete file: ${error.message}`);
+  }
+};
+
 module.exports = {
   createFileRecord,
   getFileById,
+  deleteFile,
 };

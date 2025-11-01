@@ -1,5 +1,9 @@
 const fs = require("fs");
-const { createFileRecord, getFileById } = require("../services/fileService");
+const {
+  createFileRecord,
+  getFileById,
+  deleteFile,
+} = require("../services/fileService");
 
 const uploadFile = async (req, res, next) => {
   try {
@@ -83,8 +87,36 @@ const downloadFile = async (req, res) => {
   }
 };
 
+const deleteFileById = async (req, res) => {
+  try {
+    const fileId = req.params.id;
+
+    const fileRecord = await getFileById(fileId);
+    if (!fileRecord) {
+      throw { status: 404, message: "File not exists" };
+    }
+
+    const filePath = fileRecord.file_path;
+    await deleteFile(fileId);
+
+    fs.unlink(filePath, (err) => {
+      if (err) {
+        throw { message: "failed to delete file", status: 500 };
+      }
+    });
+
+    res.status(200).json({ message: "File deleted successfully" });
+  } catch (error) {
+    if (error.message === "File not exists") {
+      return res.status(error.status).json({ error: error.message });
+    }
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   uploadFile,
   getFileInfo,
   downloadFile,
+  deleteFileById,
 };

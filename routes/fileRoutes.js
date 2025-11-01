@@ -5,6 +5,7 @@ const {
   uploadFile,
   getFileInfo,
   downloadFile,
+  deleteFileById,
 } = require("../controllers/fileController");
 
 const router = express.Router();
@@ -13,5 +14,6 @@ const router = express.Router();
 router.post("/upload", upload.single("file"), uploadFile);
 router.get("/:id", fileIdCheck, getFileInfo);
 router.get("/download/:id", fileIdCheck, downloadFile);
+router.delete("/delete/:id", fileIdCheck, deleteFileById);
 
 module.exports = router;
