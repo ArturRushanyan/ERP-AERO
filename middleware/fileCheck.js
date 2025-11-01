@@ -1,6 +1,4 @@
-const { getFileById } = require("../services/fileService");
-
-const getFileInfoCheck = async (req, res, next) => {
+const fileIdCheck = async (req, res, next) => {
   try {
     const fileId = req.params.id;
 
@@ -26,5 +24,5 @@ const getFileInfoCheck = async (req, res, next) => {
 };
 
 module.exports = {
-  getFileInfoCheck,
+  fileIdCheck,
 };
