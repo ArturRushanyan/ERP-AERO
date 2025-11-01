@@ -1,5 +1,6 @@
 const multer = require("multer");
 const fs = require("fs");
+const messages = require("../utils/constMessages");
 const { uploadDir, allowedMimes } = require("../utils/constants");
 
 if (!fs.existsSync(uploadDir)) {
@@ -21,7 +22,7 @@ const fileFilter = (req, file, cb) => {
   if (allowedMimes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new Error("Invalid file type"), false);
+    cb(new Error(messages.invalidFileType), false);
   }
 };
 

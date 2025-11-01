@@ -1,5 +1,6 @@
 const prisma = require("../config/prismaInstance");
 const path = require("path");
+const messages = require("../utils/constMessages");
 
 const createFileRecord = async (fileData) => {
   try {
@@ -17,7 +18,7 @@ const createFileRecord = async (fileData) => {
 
     return fileRecord;
   } catch (error) {
-    throw new Error(`Failed to create file record: ${error.message}`);
+    throw new Error(`${messages.failedToCreateFileRecord}: ${error.message}`);
   }
 };
 
@@ -28,7 +29,7 @@ const getFileById = async (id) => {
     });
     return fileRecord;
   } catch (error) {
-    throw new Error(`Failed to get file: ${error.message}`);
+    throw new Error(`${messages.failedToGetFile}: ${error.message}`);
   }
 };
 
@@ -40,7 +41,7 @@ const deleteFile = async (id) => {
 
     return true;
   } catch (error) {
-    throw new Error(`Failed to delete file: ${error.message}`);
+    throw new Error(`${messages.failedToDeleteFile}: ${error.message}`);
   }
 };
 
@@ -63,7 +64,7 @@ const updateFile = async (id, newFileData) => {
   } catch (error) {
     throw {
       original_error: error.message,
-      message: "Failed to update file info",
+      message: messages.failedToUpdateFileInfo,
     };
   }
 };
@@ -77,7 +78,9 @@ const getFilesPaginated = async (paginationData) => {
 
     return data;
   } catch (error) {
-    throw new Error(`Failed to get files by pagination: ${error.message}`);
+    throw new Error(
+      `${messages.failedToGetFilesByPagination}: ${error.message}`
+    );
   }
 };
 

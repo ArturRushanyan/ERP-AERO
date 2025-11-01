@@ -1,24 +1,25 @@
+const messages = require("../utils/constMessages");
+
 const fileIdCheck = (req, res, next) => {
   try {
     const fileId = req.params.id;
 
     if (!fileId) {
       return res.status(400).json({
-        error: "File ID is required",
+        error: messages.fileIdIsRequired,
       });
     }
 
     if (isNaN(parseInt(fileId))) {
       return res.status(400).json({
-        error: "Invalid file ID format",
+        error: messages.invalidFileIdFormat,
       });
     }
 
     next();
   } catch (error) {
-    console.error("File check middleware error:", error);
     res.status(500).json({
-      error: "Internal server error during file validation",
+      error: messages.internalServerError,
     });
   }
 };
@@ -30,13 +31,13 @@ const validatePagination = (req, res, next) => {
 
     if (page < 1) {
       return res.status(400).json({
-        error: "Page must be greater than 0",
+        error: messages.pageValueMustBePositive,
       });
     }
 
     if (limit < 1 || limit > 100) {
       return res.status(400).json({
-        error: "Limit must be between 1 and 100",
+        error: messages.pageLimitValueError,
       });
     }
 
@@ -50,7 +51,7 @@ const validatePagination = (req, res, next) => {
     next();
   } catch (error) {
     res.status(500).json({
-      error: "Internal server error during file validation",
+      error: messages.internalServerError,
     });
   }
 };
