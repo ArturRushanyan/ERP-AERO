@@ -28,4 +28,7 @@ module.exports = {
     "Invalid password. Password must contain at least 8 characters.",
   successFullyRegistered: "Successfully registered",
   userAlreadyExists: "User already exists",
+  noTokenProvided: "No token provided",
+  sessionExpired: "Session expired",
+  TokenExpiredError: "jwt expired",
 };

@@ -38,6 +38,15 @@ const signup = async (req, res, next) => {
   }
 };
 
+const getUserInfo = (req, res, next) => {
+  try {
+    return res.status(200).json({ id: req.user.loginId });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   signup,
+  getUserInfo,
 };
