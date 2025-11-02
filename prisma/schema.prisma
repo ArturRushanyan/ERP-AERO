@@ -22,3 +22,22 @@ model FileRecord {
   file_path   String   @db.VarChar(500)
   upload_date DateTime @default(now())
 }
+
+model User {
+  id           Int            @id @default(autoincrement())
+  login        String         @unique // email or phone
+  passwordHash String
+  createdAt    DateTime       @default(now())
+  TokenSession TokenSession[]
+}
+
+model TokenSession {
+  id           Int      @id @default(autoincrement())
+  accessToken  String
+  refreshToken String
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+}
