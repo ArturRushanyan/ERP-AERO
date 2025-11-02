@@ -1,11 +1,14 @@
-const jwt = require("jsonwebtoken");
 const configs = require("../config/config");
 const messages = require("../utils/constMessages");
 const {
   isValidEmailOrPhone,
   isValidPassword,
 } = require("../utils/utilsForValidations");
-const { getSessionByAccessToken } = require("../services/tokeSessionService");
+const {
+  getSessionByAccessToken,
+  getSessionByRefreshToken,
+} = require("../services/tokeSessionService");
+const { verifyToken } = require("../utils/jwtHelper");
 
 const validateSignUpParams = (req, res, next) => {
   try {
@@ -40,12 +43,8 @@ const authenticateUser = async (req, res, next) => {
       throw { status: 401, message: messages.noTokenProvided };
     }
 
-    try {
-      const payload = jwt.verify(token, configs.ACCESS_TOKEN_SECRET);
-      req.user = { loginId: payload.id, accessToken: token };
-    } catch (error) {
-      throw { status: 400, message: messages.TokenExpiredError };
-    }
+    const payload = verifyToken(token, configs.ACCESS_TOKEN_SECRET);
+    req.user = { loginId: payload.id, accessToken: token };
 
     const session = await getSessionByAccessToken(token);
     if (!session) {
@@ -60,7 +59,32 @@ const authenticateUser = async (req, res, next) => {
   }
 };
 
+const validateRefreshToken = async (req, res, next) => {
+  try {
+    const refreshToken = req.headers.refresh || "";
+
+    if (!refreshToken) {
+      throw { status: 401, message: messages.noTokenProvided };
+    }
+
+    const payload = verifyToken(refreshToken, configs.REFRESH_TOKEN_SECRET);
+    req.user = { loginId: payload.id, refreshToken };
+
+    const session = await getSessionByRefreshToken(refreshToken);
+
+    if (!session) {
+      throw { status: 401, message: messages.sessionExpired };
+    }
+
+    req.user["session"] = session;
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   validateSignUpParams,
   authenticateUser,
+  validateRefreshToken,
 };

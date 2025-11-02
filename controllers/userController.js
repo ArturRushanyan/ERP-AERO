@@ -96,9 +96,33 @@ const signIn = async (req, res, next) => {
   }
 };
 
+const refreshToken = async (req, res, next) => {
+  try {
+    const { session } = req.user;
+
+    const refreshSessionPayload = {
+      refreshToken: generateRefreshToken({ id: req.user.loginId }),
+      accessToken: generateAccessToken({ id: req.user.loginId }),
+      userId: session.userId,
+    };
+
+    await addUserSessionTokens(refreshSessionPayload);
+
+    return res.status(200).json({
+      data: {
+        accessToken: refreshSessionPayload.accessToken,
+        refreshToken: refreshSessionPayload.refreshToken,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   signup,
   getUserInfo,
   logout,
   signIn,
+  refreshToken,
 };

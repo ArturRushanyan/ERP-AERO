@@ -13,6 +13,10 @@ const getSessionByAccessToken = async (accessToken) => {
   return _getSessionByGivenParams({ accessToken });
 };
 
+const getSessionByRefreshToken = async (refreshToken) => {
+  return _getSessionByGivenParams({ refreshToken });
+};
+
 const deactivateSession = async (payload) => {
   return await prisma.tokenSession.update({
     where: {
@@ -36,4 +40,5 @@ module.exports = {
   getSessionByAccessToken,
   deactivateSession,
   addUserSessionTokens,
+  getSessionByRefreshToken,
 };
