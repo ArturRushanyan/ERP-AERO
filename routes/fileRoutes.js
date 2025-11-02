@@ -1,6 +1,7 @@
 const express = require("express");
 const { upload } = require("../config/multer");
 const { fileIdCheck, validatePagination } = require("../middleware/fileCheck");
+const { authenticateUser } = require("../middleware/userValidator");
 const {
   uploadFile,
   getFileInfo,
@@ -11,6 +12,8 @@ const {
 } = require("../controllers/fileController");
 
 const router = express.Router();
+
+router.use(authenticateUser);
 
 // File routes
 router.post("/upload", upload.single("file"), uploadFile);
