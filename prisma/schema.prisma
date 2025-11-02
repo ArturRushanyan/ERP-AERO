@@ -33,7 +33,7 @@ model User {
 
 model TokenSession {
   id           Int      @id @default(autoincrement())
-  accessToken  String
+  accessToken  String   @unique
   refreshToken String
   isActive     Boolean  @default(true)
   createdAt    DateTime @default(now())
