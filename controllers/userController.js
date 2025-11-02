@@ -1,17 +1,41 @@
-const signup = async (req, res) => {
-  const { id, password } = req.body;
+const { getUserByLoginId, signUp } = require("../services/userService");
+const { hashPassword } = require("../utils/hashUtils");
+const {
+  generateAccessToken,
+  generateRefreshToken,
+} = require("../utils/jwtHelper");
+const messages = require("../utils/constMessages");
 
-  const exists = await prisma.user.findUnique({ where: { login: id } });
-  if (exists) return res.status(400).json({ message: "User already exists" });
+const signup = async (req, res, next) => {
+  try {
+    const { id, password } = req.body;
 
-  const passwordHash = await authService.hashPassword(password);
+    const doesUserExists = await getUserByLoginId(id);
 
-  const user = await prisma.user.create({
-    data: { login: id, passwordHash },
-  });
+    if (doesUserExists) {
+      throw { status: 409, message: messages.userAlreadyExists };
+    }
 
-  const tokens = await authService.createSession(user.id);
-  res.json(tokens);
+    const passwordHash = await hashPassword(password);
+    const signUpPayload = {
+      refreshToken: generateRefreshToken({ id }),
+      accessToken: generateAccessToken({ id }),
+      password: passwordHash,
+      loginId: id,
+    };
+
+    await signUp(signUpPayload);
+
+    return res.status(201).json({
+      data: {
+        accessToken: signUpPayload.accessToken,
+        refreshToken: signUpPayload.refreshToken,
+      },
+      message: messages.successFullyRegistered,
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 module.exports = {

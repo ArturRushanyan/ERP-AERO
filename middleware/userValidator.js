@@ -6,7 +6,6 @@ const {
 
 const validateSignUpParams = (req, res, next) => {
   try {
-    console.log("req body -=====", req.body);
     const loginId = req.body.id;
     const password = req.body.password;
 
@@ -26,7 +25,6 @@ const validateSignUpParams = (req, res, next) => {
 
     next();
   } catch (error) {
-    console.log("error here =========", error);
     next(error);
   }
 };

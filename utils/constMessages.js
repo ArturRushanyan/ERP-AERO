@@ -26,4 +26,6 @@ module.exports = {
     "Please send valid Id parameter. (it can be or email or phone number)",
   invalidPassword:
     "Invalid password. Password must contain at least 8 characters.",
+  successFullyRegistered: "Successfully registered",
+  userAlreadyExists: "User already exists",
 };
