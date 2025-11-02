@@ -24,7 +24,16 @@ const deactivateSession = async (payload) => {
   });
 };
 
+const addUserSessionTokens = async (payload) => {
+  await prisma.tokenSession.create({
+    data: {
+      ...payload,
+    },
+  });
+};
+
 module.exports = {
   getSessionByAccessToken,
   deactivateSession,
+  addUserSessionTokens,
 };

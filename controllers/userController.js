@@ -1,6 +1,9 @@
 const { getUserByLoginId, signUp } = require("../services/userService");
-const { deactivateSession } = require("../services/tokeSessionService");
-const { hashPassword } = require("../utils/hashUtils");
+const {
+  deactivateSession,
+  addUserSessionTokens,
+} = require("../services/tokeSessionService");
+const { hashPassword, comparePassword } = require("../utils/hashUtils");
 const {
   generateAccessToken,
   generateRefreshToken,
@@ -17,7 +20,7 @@ const signup = async (req, res, next) => {
       throw { status: 409, message: messages.userAlreadyExists };
     }
 
-    const passwordHash = await hashPassword(password);
+    const passwordHash = hashPassword(password);
     const signUpPayload = {
       refreshToken: generateRefreshToken({ id }),
       accessToken: generateAccessToken({ id }),
@@ -58,8 +61,44 @@ const logout = async (req, res, next) => {
   return res.status(200).json({ success: true });
 };
 
+const signIn = async (req, res, next) => {
+  try {
+    const { id, password } = req.body;
+
+    const user = await getUserByLoginId(id);
+
+    if (!user) {
+      throw { status: 409, message: messages.wrongLoginOrPassword };
+    }
+
+    const isPasswordCorrect = await comparePassword(password, user.password);
+
+    if (!isPasswordCorrect) {
+      throw { status: 409, message: messages.wrongLoginOrPassword };
+    }
+
+    const signInPayload = {
+      refreshToken: generateRefreshToken({ id }),
+      accessToken: generateAccessToken({ id }),
+      userId: user.id,
+    };
+
+    await addUserSessionTokens(signInPayload);
+
+    return res.status(200).json({
+      data: {
+        accessToken: signInPayload.accessToken,
+        refreshToken: signInPayload.refreshToken,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   signup,
   getUserInfo,
   logout,
+  signIn,
 };

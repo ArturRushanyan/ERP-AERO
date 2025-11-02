@@ -31,4 +31,5 @@ module.exports = {
   noTokenProvided: "No token provided",
   sessionExpired: "Session expired",
   TokenExpiredError: "jwt expired",
+  wrongLoginOrPassword: "Wrong login id or password",
 };
