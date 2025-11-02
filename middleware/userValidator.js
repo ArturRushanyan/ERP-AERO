@@ -40,17 +40,19 @@ const authenticateUser = async (req, res, next) => {
       throw { status: 401, message: messages.noTokenProvided };
     }
 
+    try {
+      const payload = jwt.verify(token, configs.ACCESS_TOKEN_SECRET);
+      req.user = { loginId: payload.id, accessToken: token };
+    } catch (error) {
+      throw { status: 400, message: messages.TokenExpiredError };
+    }
+
     const session = await getSessionByAccessToken(token);
     if (!session) {
       throw { status: 401, message: messages.sessionExpired };
     }
 
-    try {
-      const payload = jwt.verify(token, configs.ACCESS_TOKEN_SECRET);
-      req.user = { loginId: payload.id };
-    } catch (error) {
-      throw { status: 400, message: messages.TokenExpiredError };
-    }
+    req.user["session"] = session;
 
     next();
   } catch (error) {

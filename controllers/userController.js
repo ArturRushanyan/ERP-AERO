@@ -1,4 +1,5 @@
 const { getUserByLoginId, signUp } = require("../services/userService");
+const { deactivateSession } = require("../services/tokeSessionService");
 const { hashPassword } = require("../utils/hashUtils");
 const {
   generateAccessToken,
@@ -46,7 +47,19 @@ const getUserInfo = (req, res, next) => {
   }
 };
 
+const logout = async (req, res, next) => {
+  const payload = {
+    accessToken: req.user.accessToken,
+    userId: req.user.session.userId,
+    isActive: true,
+  };
+
+  await deactivateSession(payload);
+  return res.status(200).json({ success: true });
+};
+
 module.exports = {
   signup,
   getUserInfo,
+  logout,
 };
