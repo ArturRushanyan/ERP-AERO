@@ -21,4 +21,9 @@ module.exports = {
   invalidFileIdFormat: "Invalid file ID format",
   pageValueMustBePositive: "Page value must be greater than 0",
   pageLimitValueError: "Limit must be between 1 and 100",
+  signInParamsRequired: "Id and password fields are required",
+  sendValidIdParameter:
+    "Please send valid Id parameter. (it can be or email or phone number)",
+  invalidPassword:
+    "Invalid password. Password must contain at least 8 characters.",
 };
